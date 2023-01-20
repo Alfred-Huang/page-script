@@ -1,0 +1,40 @@
+public class PageScript {
+    public static void main(String[] args) throws IOException {
+        List<String> list = helper("src/main/data.txt");
+        List<String> dataList = new ArrayList<>();
+        int numOfFile = 1;
+        String filePath = "src/main/outputs/";
+        for(String s : list){
+            dataList.add(s);
+            if(dataList.size() == 1000) {
+                writeFile(filePath + "output-" + numOfFile + ".txt", dataList);
+                dataList.clear();
+                numOfFile++;
+            }
+        }
+        if(dataList.size() > 0){
+            writeFile(filePath + "output-" + numOfFile + ".txt", dataList);
+            dataList.clear();
+        }
+    }
+
+    public static List<String> helper(String targetFilePath) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(targetFilePath));
+        List<String> list = new ArrayList<>();
+        while(reader.ready()){
+            String curString = reader.readLine();
+            list.add(curString);
+        }
+        reader.close();
+        return list;
+    }
+
+    public static void writeFile(String filePath, List<String> data) throws IOException {
+        FileWriter fw = new FileWriter(filePath);
+        BufferedWriter bufw = new BufferedWriter(fw);
+        for (String s : data){
+            bufw.write(s+"\n");
+        }
+        bufw.flush();
+    }
+}
